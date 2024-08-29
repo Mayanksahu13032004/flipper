@@ -1,0 +1,22 @@
+#card:hover{
+   transform:rotateY(180deg);
+   background-size: cover;
+}
+#card:hover>#img{
+    display: none;
+}
+#card:hover>#flip{
+    display: flex;
+    transform: rotateY(180deg);
+}
+#card{
+    transition: all 1s;
+}
+#card:hover>#title{
+    transform:rotateY(180deg);  
+
+}
+#flip{
+    display: none;
+    
+}
