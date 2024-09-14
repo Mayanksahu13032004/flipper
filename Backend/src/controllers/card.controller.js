@@ -3,13 +3,15 @@ import {ApiError} from "../utils/ApiError.js"
 import {CardDetail} from "../models/card.model.js"
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import mongoose from "mongoose";
 // Create a new card
 const createCard = asyncHandler(async (req, res) => {
   
   
-    const {card_image, tag, title, location, description, total_price, get_price, security_type, investment_multiple, maturity, min_investment } = req.body;
+    const { tag, title, location, description, total_price, get_price, security_type, investment_multiple, maturity, min_investment } = req.body;
+  console.log("tag",tag);
   
-    console.log("card_image name is:", card_image);
+    // console.log("card_image name is:", card_image);
   
     // Validate required fields
     if ([tag, title].some(field => field?.trim() === "")) {
@@ -29,7 +31,7 @@ const createCard = asyncHandler(async (req, res) => {
     // Create card data
     const newCardData = {
       tag,
-      card_image, // Assuming you want to store the image URL
+      // card_image, // Assuming you want to store the image URL
       title,
       location,
       description,
@@ -66,11 +68,39 @@ const getCards = asyncHandler(async(req, res) => {
 });
 
 
-
-const deleteCard = asyncHandler(async (req,res) => {
-    const card = await CardDetail.deleteMany()
-    res.status(200).json({
-        message : "data deleted successfully "
-    })
+const updateCard=asyncHandler(async(req,res)=>{
+  const cardId = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(cardId)) {
+    return res.status(400).json({ message: 'Invalid user ID' });
+ }
+ try {
+  const updateCard=await CardDetail.findByIdAndUpdate(cardId,req.body,{new:true,runValidators:true})
+  if(!updateCard){
+    return res.status(404).json({ message: 'Card not found' });
+ }
+ res.status(200).json(updateCard);
+ } catch (error) {
+  console.log("Error generate while update the card",error);
+ }
 })
-export {createCard,getCards,deleteCard}
+
+
+const deleteCard=asyncHandler(async(req,res)=>{
+  const  cardId=req.params.id;
+  if(!mongoose.Types.ObjectId.isValid(cardId)){
+    return res.status(400).json({ message: 'Invalid user ID' });
+  }
+  try {
+    const deleteCard=await CardDetail.findByIdAndDelete(cardId,req.body,{new:true,runValidators:true})
+    if(!deleteCard){
+      return res.status(404).json({message:"Card not found"})
+    }
+    res.status(200).json({message:"User card delete successfully of this ID",cardId})
+  } catch (error) {
+    console.log("Error generate while delete the card",error);
+  }
+})
+
+
+
+export {createCard,getCards,updateCard,deleteCard}

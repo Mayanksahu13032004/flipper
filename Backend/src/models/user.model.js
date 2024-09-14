@@ -5,7 +5,7 @@ import mongoose,{Schema} from "mongoose";
 
 const patientSchema=new Schema(
   {
-  name:{
+  fullname:{
     type:String,
     required:true
   },

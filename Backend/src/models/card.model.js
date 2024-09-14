@@ -6,10 +6,10 @@ const CardSchema = new Schema(
          type: String, 
          required: true 
         },
-    card_image: {
-         type: String, 
-         required: false 
-        },
+    // card_image: {
+    //      type: String, 
+    //      required: false 
+    //     },
     title: {
          type: String,
           required: true 

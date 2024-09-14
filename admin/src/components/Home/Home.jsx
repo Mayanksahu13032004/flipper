@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Home() {
-  const [message, setMessage] = useState('');
+  
   const [loading, setLoading] = useState(false); // New loading state
   const [user, setUser] = useState({
     tag: '',
@@ -58,15 +60,17 @@ export default function Home() {
       const responseData = await response.json();
 
       if (response.status === 201) {
-        setMessage(responseData.message);
+        toast.success('Card Created successfully!');
+        
         console.log('Card created successfully');
         resetForm();
       } else {
-        setMessage(responseData.message || 'Card not created');
+        toast.error('An error occurred while creating the card!');
       }
     } catch (error) {
       console.error('Error creating card:', error);
-      setMessage('An error occurred while creating the card');
+      toast.error('An error occurred while creating the card!');
+      
     } finally {
       setLoading(false); // Set loading to false after submission is complete
     }
@@ -134,8 +138,9 @@ export default function Home() {
             {loading ? 'Submitting...' : 'Submit'}
           </button>
         </form>
-        {message && <p className="text-2xl mt-6 text-green-600">{message}</p>}
+       
       </div>
+      <ToastContainer /> 
     </div>
   );
 }

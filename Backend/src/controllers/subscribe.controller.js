@@ -4,14 +4,23 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 
 // User can subscribe the newsletter with Email.
 const subscribe=asyncHandler(async(req, res) => {
+                 
     const { email } = req.body;
+    console.log("the email is which subcscribe the user",email);
+    
     try {
         const newSubscriber = new SubscriberDetail({ email });
-        await newSubscriber.save();
-        console.log("The user can successfully subscribe.");
-        return res.status(201).json(
-        new ApiResponse(200,newSubscriber,"Subscribed successfully.")
-        )
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(email.length>=8 && emailRegex.test(email)){
+            await newSubscriber.save();
+            console.log("The user can successfully subscribe.");
+            return res.status(201).json(
+            new ApiResponse(200,newSubscriber,"Subscribed successfully.")
+            )
+        }else{
+            res.status(400).json({ message: 'Invalid Email' });
+        }
+      
 } catch (error) {
         if (error.code === 11000) {
             res.status(400).json({ message: 'Email already subscribed' });

@@ -18,8 +18,8 @@ function ViewSubscribe() {
     <div>
             <h2 className='text-4xl mb-3 text-center font-bold'>Newsletter Subscribers List</h2>
             <ul>
-                {subscribers.map((subscriber) => (
-                    <li className='text-xl ml-2 font-semibold mb-3' key={subscriber._id}>{subscriber.email}</li>
+                {subscribers.map((subscriber,index) => (
+                    <li  className='text-xl ml-2 font-semibold mb-3' key={subscriber._id}><span className='font-semibold text-2xl'>{index+1}.</span>  {subscriber.email}</li>
                 ))}
             </ul>
         </div>

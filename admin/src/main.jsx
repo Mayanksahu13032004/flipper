@@ -5,12 +5,17 @@ import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } 
 import Layout from './Layout.jsx'
 import Home from './components/Home/Home.jsx'
 import ViewSubscribe from './components/ViewSubscribe/ViewSubscribe.jsx'
+import AllCard from './components/allCard/allCard.jsx'
+import AllRegisterUser from './components/allRegisterUser/AllRegisterUser.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Layout />}>
       <Route path='/' element={<Home />} />
       <Route path='viewSubscribe' element={<ViewSubscribe />} />
+      <Route path='allcard' element={<AllCard/>} />
+      <Route path='allusers' element={<AllRegisterUser/>} />
+      <Route path='allusers' element={<AllRegisterUser/>} />
     </Route>
   )
 )

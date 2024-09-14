@@ -2,7 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import {ApiError} from "../utils/ApiError.js"
 import { Patient } from "../models/user.model.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
-
+import mongoose from "mongoose";
 
 
 
@@ -11,14 +11,13 @@ const userRegister = asyncHandler(async(req,res)=>{
 console.log("The User is reigistred is successfully:-");
 
 
-const {name,email,password}=req.body
-console.log("name:-",name);
-console.log("email:-",email);
-console.log("password:-",password);
-console.log(req.body);
+const {fullname,email,password}=req.body
+
+// console.log("username:-",username);
+// console.log(req.body);
 
 if(
-   [name,email,password].some((field)=>
+   [fullname,email,password].some((field)=>
    field?.trim()==="")
 )
 {
@@ -27,7 +26,7 @@ if(
 
 
 const existeduser=await Patient.findOne({
-   $or:[{email},{password}]
+   $or:[{email}]
 })
 
 
@@ -38,7 +37,7 @@ if (existeduser) {
 }
 
 const patient=await Patient.create({
-   name,
+   fullname,
    email,
    password
 })
@@ -54,9 +53,6 @@ return res.status(201).json(
    new ApiResponse(200,createPatient,"User register sucessfully")
 )
 })
-
-
-
 
 
 
@@ -82,17 +78,70 @@ if(!patient){
     throw new ApiError(404,"notexits")
 }
 
-
-
-
 // exist matlab login successfully
-return res.status(200).json({message : "exists" })
+return res.status(200).json({message : "Login successfully" })
 })
 
 
+const updateUser=asyncHandler(async(req,res)=>{
+   console.log("Update user field");
+   
+   const userId=req.params.id;
+   
+   if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: 'Invalid user ID' });
+   }
+   
+   try {
+const updateUser=await Patient.findByIdAndUpdate(userId,req.body,{new:true,runValidators: true});
+if(!updateUser){
+   return res.status(404).json({ message: 'User not found' });
+}
+
+res.status(200).json(updateUser);
+ 
+   } catch (error) {
+      console.log("Error generate while update the card",error);
+      
+   }
+   
+})
 
 
-export {userRegister,Login}
+const deleteUser=asyncHandler(async(req,res)=>{
+   // console.log("Delete user");
+   const userId=req.params.id;
+   if(!mongoose.Types.ObjectId.isValid(userId)){
+         return res.status(400).json({message:"Invalid user ID"});
+   }
+   try {
+      const deleteUser=await Patient.findByIdAndDelete(userId,req.body,{new:true,runValidators:true})
+      if(!deleteUser){
+         return res.status(404).json({ message: 'User not found' });
+      }
+      return res.status(200).json({ message: 'user delete successfully' });
+   } catch (error) {
+      console.log("Error generate while delete the card",error);
+   }
+})
+
+
+const getllRegisterUser=asyncHandler(async(req,res)=>{
+   
+   try {
+      const alluser=await Patient.find();
+      res.json(alluser);   
+   } catch (error) {
+      res.status(500)
+      .json({message:"Server error"})
+      
+   }
+   
+   
+})
+
+
+export {userRegister,Login,updateUser,deleteUser,getllRegisterUser}
 
 
 
