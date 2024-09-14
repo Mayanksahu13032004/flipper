@@ -5,7 +5,7 @@ import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } 
 import Layout from './Layout.jsx'
 import Home from './components/Home/Home.jsx'
 import ViewSubscribe from './components/ViewSubscribe/ViewSubscribe.jsx'
-import AllCard from './components/allCard/allCard.jsx'
+import AllCard from './components/allCard/AllCard.jsx'
 import AllRegisterUser from './components/allRegisterUser/AllRegisterUser.jsx'
 
 const router = createBrowserRouter(
