@@ -3,7 +3,7 @@ import React from 'react'
 function UpdateCard() {
   return (
     <div>
-      hii
+      update are avalaible for all users
     </div>
   )
 }
