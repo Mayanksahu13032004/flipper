@@ -25,7 +25,7 @@ import subscribe from './routes/subscribe.routes.js'
 app.use("/api/v1/project/users",userLogin)   
 app.use("/api/v1/project/card",cardinquery)
 app.use("/api/v1/project/subscribe",subscribe)
-app.get('/',(req,res)=>{
+app.get('/home',(req,res)=>{
   res.send("efheuovr")
 })
 

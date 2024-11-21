@@ -6,6 +6,8 @@ import Layout from './Layout.jsx'
 import Home from './components/Home/Home.jsx'
 import Login from './components/Login/Login.jsx'
 import Register from './components/Register/Register.jsx'
+import CardDetailPage from './components/CardDetailPage/CardDetailPage.jsx'
+import CardBuy from './components/CardBuy/CardBuy.jsx'
 
 
 const router = createBrowserRouter(
@@ -14,6 +16,9 @@ const router = createBrowserRouter(
       <Route path='' element={<Home />} />
       <Route path='login' element={<Login />} />
       <Route path='register' element={<Register />} />
+      <Route path='craddetailpage' element={<CardDetailPage />} />
+
+      <Route path='cradbuy' element={<CardBuy />} />
    </Route>
   )
 )

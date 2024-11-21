@@ -7,29 +7,12 @@ import mongoose from "mongoose";
 // Create a new card
 const createCard = asyncHandler(async (req, res) => {
   
-  
-    const { tag, title, location, description, total_price, get_price, security_type, investment_multiple, maturity, min_investment } = req.body;
-  console.log("tag",tag);
-  
-    // console.log("card_image name is:", card_image);
-  
-    // Validate required fields
-    if ([tag, title].some(field => field?.trim() === "")) {
+const { tag, title, location, description, total_price, get_price, security_type, investment_multiple, maturity, min_investment } = req.body;
+
+if ([tag, title].some(field => field?.trim() === "")) {
       throw new ApiError(400, "Tag and title fields are required");
     }
-  
-    // // Validate image file
-    // const imageLocalPath = req.files?.card_image?.[0]?.path;
-    // if (!imageLocalPath) {
-    //   throw new ApiError(400, 'Image file is required');
-    // }
-  
-    // // // Upload image to cloud storage
-    // const image = await uploadOnCloudinary(imageLocalPath);
-    // console.log('Image URL:', image.url);
-  
-    // Create card data
-    const newCardData = {
+     const newCardData = {
       tag,
       // card_image, // Assuming you want to store the image URL
       title,

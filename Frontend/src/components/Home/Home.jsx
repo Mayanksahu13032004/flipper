@@ -37,10 +37,11 @@ import logo3 from './assest/Next Invest - Landing Page (Icons)/004-instagram.svg
 import logo4 from './assest/Next Invest - Landing Page (Icons)/CaretDown.svg'
 import Shape from './assest/Next Invest - Landing Page (images)/Shape.svg'
 import progress from './assest/Next Invest - Landing Page (images)/Subtract.svg'
+import { Navigate, useNavigate } from "react-router-dom";
 
 
 function Home() {
-
+const navigate=useNavigate();
   const [cards,setcards ]=useState([]);
   const [loading, setLoading] = useState(true); // New loading state
   
@@ -83,6 +84,8 @@ const handleSubmit = async (e) => {
     });
 
     const responseData = await response.json();
+    console.log("The response of subscribe is",responseData);
+    
     if (response.status === 201) {
       toast.success('User Subscribe successfully!');
       console.log("User Subscribe successfully");
@@ -93,6 +96,8 @@ const handleSubmit = async (e) => {
       toast.error('Invalid Email!');
     }
   } catch (error) {
+    console.log("error",error);
+    
     toast.error('Invalid Email!');
   }
 }
@@ -109,7 +114,9 @@ const data=[
   {name:"Telegram",value:500000000},
 ]
 
-
+const goToDetailPage=(card)=>{
+  navigate('/craddetailpage',{state:{card}});
+};
 
 
 return (
@@ -123,71 +130,87 @@ return (
   </div>
 
    
-   <div id="2ndpage" className='w-[100%] flex flex-wrap justify-center'>
-        <div className="w-[100%] text-center">
-          <p className="text-3xl font-bold">Offerings Open for Investment</p>
-          <p className="font-semibold">Explore pre-vetted investment opportunities available in a growing number of industry categories.</p>
-        </div>
+  <div id="2ndpage"  className="w-full flex flex-wrap justify-center bg-gray-100 py-10">
+  <div className="w-full text-center mb-8">
+    <p className="text-3xl font-bold text-gray-800">Offerings Open for Investment</p>
+    <p className="font-medium text-gray-600">
+      Explore pre-vetted investment opportunities available in a growing number of industry categories.
+    </p>
+  </div>
 
-        {/* Display loading indicator while fetching data */}
-        {loading ? (
-          <div className="w-full text-center mt-10">
-            <p className="font-semibold text-2xl">Loading cards, please wait...</p>
+  {loading ? (
+    <div  className="w-full text-center mt-10">
+      <p className="font-medium text-2xl text-gray-700">Loading cards, please wait...</p>
+    </div>
+  ) : (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4">
+      {cards.map((card) => {
+        const totalRaised = card.get_price;
+        const totalGoal = card.total_price;
+        const percentageRaised = (totalRaised / totalGoal) * 100;
+
+        return (
+          <div
+          onClick={()=>goToDetailPage(card)}
+            key={card.id}
+            className="bg-white shadow-lg border border-gray-200 rounded-lg p-6 flex flex-col h-full"
+          >
+            <img
+              src={card.card_image}
+              alt={card.title}
+              className="w-full h-[150px] object-cover rounded mb-4"
+            />
+            <div className="flex-1">
+              <h2 className="font-bold text-lg text-gray-900">{card.title}</h2>
+              <p className="text-sm text-gray-500 mb-2">{card.location}</p>
+              <p className="text-gray-600 text-sm mb-4">{card.description}</p>
+            </div>
+            <div className="mt-4">
+              <progress
+                value={percentageRaised}
+                max="100"
+                className="w-full h-2 rounded bg-gray-200"
+              ></progress>
+              <p className="text-sm mt-2 text-gray-700">
+                <span className="text-green-600 font-bold">${card.get_price}</span> raised of $
+                {card.total_price}
+              </p>
+            </div>
+            <div className="mt-4 text-sm text-gray-700 space-y-1">
+              <div className="flex justify-between">
+                <span className="font-medium">Security Type:</span>
+                <span>{card.security_type}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-medium">Investment Multiple:</span>
+                <span>{card.investment_multiple}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-medium">Maturity:</span>
+                <span>{card.maturity}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-medium">Min Investment:</span>
+                <span>{card.min_investment}</span>
+              </div>
+            </div>
+            <button  className="mt-4 w-full bg-pink-600 hover:bg-pink-700 text-white py-2 rounded font-medium">
+              VIEW
+            </button>
           </div>
-        ) : (
-          <>
-            {/* Render cards after data is fetched */}
-            {cards.map((card) => {
-              const totalRaised = card.get_price;
-              const totalGoal = card.total_price;
-              const percentageRaised = (totalRaised / totalGoal) * 100;
+        );
+      })}
+    </div>
+  )}
+</div>
 
-              return (
-                <div key={card.id} className="card w-[22%] ml-12 mt-10 mb-10 bg-white hover:shadow-xl hover:border-4 hover:border-gray-600 hover:border-solid pb-4">
-                  <div id='img' className='bg-cover h-[32vh] hover:hidden bg-slate-500'>
-                    <img src={card.card_image} alt="" className="ml-8 content-box h-[100%]" />
-                    <div className='flex'>
-                      <div id='home' className='bg-slate-400 p-2 pt-1 pb-1 text-md mt-4 ml-4 relative bottom-52'>home</div>
-                      <div id='family' className='bg-slate-400 p-2 pt-1 pb-1 text-md mt-4 ml-4 relative bottom-52'>{card.tag}</div>
-                    </div>
-                  </div>
-                  <div id='title' className='pl-4 bg-slate-100'>
-                    <p className='text-xl ml-3 font-bold'>{card.title}</p>
-                    <p className='mb-4 ml-3'>{card.location}</p>
-                    <p className="ml-3 font-semibold">{card.description}</p>
-                    <div style={{ width: '100%', textAlign: 'center' }}>
-                      <progress value={percentageRaised} max="100" style={{ width: '90%' }} className=""></progress>
-                    </div>
-                    <p><span className='text-green-600 ml-3'>$ {card.get_price}</span> raised of {card.total_price}</p>
-                  </div>
-                  <div id="flip" className="flex flex-col h-[60%] justify-evenly mt-5">
-                    <hr />
-                    <p className="flex justify-between ml-3 mr-3"><span>Security Type</span> <span className="font-semibold">{card.security_type}</span></p>
-                    <p className="flex justify-between ml-3 mr-3"><span>Investment_multiple</span> <span className="font-semibold">{card.investment_multiple}</span></p>
-                    <p className="flex justify-between ml-3 mr-3"><span>Maturity</span> <span className="font-semibold">{card.maturity}</span></p>
-                    <p className="flex justify-between ml-3 mr-3"><span>Min_investment</span> <span className="font-semibold">{card.min_investment}</span></p>
-                    <button className="h-[30%] w-[100%] bg-pink-600 text-white text-xl font-semibold self-end hover:bg-green-700">VIEW</button>
-                  </div>
-                </div>
-              );
-            })}
-          </>
-        )}
-      </div>
 
 
 <div id='3rdpage' className='w-[100%] h-[80vh] bg-slate-200 mt-16'>
   <img src={svg14} alt="" className='h-[8vh] relative top-0 left-[90%]'/> 
    
 
- 
-
-
-
-
-
-
-   <img src={svg16} alt="" className='h-[40vh] relative top-20 left-[50%]'/>
+ <img src={svg16} alt="" className='h-[40vh] relative top-20 left-[50%]'/>
    <img src={svg1} alt="" className='h-[55vh] relative bottom-[150px]' />
    <div className=' relative bottom-[520px] left-60'>
     <img src={progress} alt="" className="h-9" />
@@ -248,13 +271,6 @@ return (
         </BarChart>
       </div>
     </div>
-
-
-
-
-
-
-
 
 
 <div id='5thpage' className='h-[60vh] bg-slate-300 flex justify-evenly'>

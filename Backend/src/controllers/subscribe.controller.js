@@ -5,10 +5,8 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 // User can subscribe the newsletter with Email.
 const subscribe=asyncHandler(async(req, res) => {
                  
-    const { email } = req.body;
-    console.log("the email is which subcscribe the user",email);
-    
-    try {
+const { email } = req.body;
+try {
         const newSubscriber = new SubscriberDetail({ email });
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if(email.length>=8 && emailRegex.test(email)){
